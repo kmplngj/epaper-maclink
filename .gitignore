@@ -1,0 +1,37 @@
+# Private settings, vendor checkouts, diagnostics and original flash backups
+/.local/
+.env
+.env.*
+!.env.example
+secrets.h
+maclink_secrets.h
+maclink_panel_test.h
+*.key
+*.pem
+
+# Build products and dependency environments (keep dependency lockfiles)
+.build/
+.swiftpm/
+.pio/
+.venv/
+/dist/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.bin
+*.elf
+*.map
+*.o
+*.log
+
+# Runtime storage and machine/editor state
+/server/data/
+/data/
+*.sqlite3*
+*.db
+.DS_Store
+*.xcuserstate
+xcuserdata/
+.idea/
+.vscode/
+.codegraph/

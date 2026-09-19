@@ -1,0 +1,15 @@
+[project]
+name = "maclink-server"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = ["fastapi[standard]>=0.135", "pillow>=12.0", "tzdata>=2025.2"]
+
+[dependency-groups]
+dev = ["pytest>=9", "httpx>=0.28"]
+
+[tool.fastapi]
+entrypoint = "maclink_server.app:app"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
