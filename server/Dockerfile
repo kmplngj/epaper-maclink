@@ -1,5 +1,5 @@
 FROM python:3.13-slim
-COPY --from=ghcr.io/astral-sh/uv:0.10.12 /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.5 /uv /usr/local/bin/uv
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
 COPY LICENSE ./

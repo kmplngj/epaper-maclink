@@ -18,8 +18,8 @@ OpenDisplay is downloaded into ignored `.local/vendor/` during a firmware build.
 
 | Component | Pinned version | License and attribution |
 | --- | --- | --- |
-| [HAKit](https://github.com/home-assistant/HAKit) | 0.4.18 | [Apache 2.0](licenses/HAKit-Apache-2.0.md), Home Assistant contributors; see upstream source notices |
-| [Starscream, bgoncal fork](https://github.com/bgoncal/Starscream) | 4.0.9 | [Apache 2.0](licenses/Starscream-Apache-2.0.txt), Copyright (c) 2014–2023 Dalton Cherry |
+| [HAKit](https://github.com/home-assistant/HAKit) | 0.4.19 | [Apache 2.0](licenses/HAKit-Apache-2.0.md), Home Assistant contributors; see upstream source notices |
+| [Starscream, bgoncal fork](https://github.com/bgoncal/Starscream) | 4.0.10 | [Apache 2.0](licenses/Starscream-Apache-2.0.txt), Copyright (c) 2014–2023 Dalton Cherry |
 | [PromiseKit](https://github.com/mxcl/PromiseKit) | 8.2.0 | [MIT](licenses/PromiseKit-MIT.txt), Copyright 2016–present Max Howell |
 
 PromiseKit is resolved by HAKit's optional product dependency; MacLink selects the `HAKit` product, not `HAKit+PromiseKit`. Exact revisions are recorded in [Package.resolved](macos/Package.resolved). The build bundles these license texts with the app.
