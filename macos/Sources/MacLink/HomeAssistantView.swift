@@ -80,6 +80,7 @@ struct HomeAssistantView:View {
                 case "motion","occupancy","presence": item.onText="Detected";item.offText="Clear"
                 default: break
                 }
+                home.seed(sensor)
                 display.footer.items.append(item);model.update(display)
             }
         }
@@ -142,13 +143,17 @@ private struct SensorPicker:View {
     @State private var search=""
     @State private var selected:String?
     private var matches:[SensorReading] {
-        home.sensors.filter { search.isEmpty || $0.name.localizedCaseInsensitiveContains(search) || $0.id.localizedCaseInsensitiveContains(search) }
+        (home.catalog ?? []).filter { search.isEmpty || $0.name.localizedCaseInsensitiveContains(search) || $0.id.localizedCaseInsensitiveContains(search) }
     }
     var body:some View {
         VStack(alignment:.leading,spacing:16) {
             Text("Add a sensor").font(.title2.weight(.semibold))
             TextField("Search names or entity IDs",text:$search).textFieldStyle(.roundedBorder)
-            if matches.isEmpty {
+            if let message=home.catalogProblem {
+                ContentUnavailableView("Sensors unavailable",systemImage:"exclamationmark.triangle",description:Text(message))
+            } else if home.catalog == nil {
+                ProgressView("Loading sensors…").frame(maxWidth:.infinity,maxHeight:.infinity)
+            } else if matches.isEmpty {
                 ContentUnavailableView("No sensors found",systemImage:"magnifyingglass",description:Text(home.ready ? "Try another search. Only sensors and binary sensors are listed.":"Reconnect Home Assistant, then try again."))
             } else {
                 List(matches,selection:$selected) { sensor in
@@ -161,9 +166,11 @@ private struct SensorPicker:View {
             HStack {
                 Text("\(matches.count) sensors").font(.caption).foregroundStyle(.secondary)
                 Spacer();Button("Cancel") { dismiss() }.keyboardShortcut(.cancelAction)
-                Button("Add") { if let selected,let sensor=home.readings[selected] { choose(sensor);dismiss() } }
+                Button("Add") { if let selected,let sensor=matches.first(where:{$0.id==selected}) { choose(sensor);dismiss() } }
                     .disabled(!home.ready || !matches.contains {$0.id==selected}).keyboardShortcut(.defaultAction)
             }
         }.padding(24).frame(width:560,height:480)
+        .onAppear { home.loadCatalog() }
+        .onDisappear { home.releaseCatalog() }
     }
 }

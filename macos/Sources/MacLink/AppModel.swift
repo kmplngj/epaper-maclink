@@ -28,6 +28,7 @@ final class AppModel: ObservableObject {
     let homeAssistant=HomeAssistant()
     private var footerSampler=FooterSampler()
     private var observers:[NSObjectProtocol]=[]
+    private var watchedSensors:AnyCancellable?
     private var debounce:Task<Void,Never>?
     private var running=false
     private var connecting=false
@@ -72,6 +73,8 @@ final class AppModel: ObservableObject {
         boundaryTimer=Timer.scheduledTimer(withTimeInterval:60,repeats:true) { [weak self] _ in Task { @MainActor in self?.schedule() } }
         boundaryTimer?.tolerance=10
         homeAssistant.availabilityChanged = { [weak self] in self?.schedule() }
+        watchedSensors=$settings.map { Set($0.displays.flatMap { $0.footer.items.map(\.entityID) }) }.removeDuplicates()
+            .sink { [weak self] in self?.homeAssistant.watch($0) }
         if let config=settings.homeAssistant,config.enabled,let url=try? HomeAssistant.validatedURL(config.url) {
             let token=Keychain.get("home-assistant")
             if !token.isEmpty { homeAssistant.start(url:url,token:token) }
